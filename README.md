@@ -5,3 +5,20 @@
 
 
 
+## 環境構築
+
+### app(バックエンド側)
+
+```bash
+$ docker build myimage ./app
+$ docker run -p 80:80 myimage
+```
+
+
+### front(フロント側)
+
+```bash
+$ npm init @vue/latest
+```
+
+
