@@ -18,7 +18,59 @@ $ docker run -p 80:80 myimage
 ### front(フロント側)
 
 ```bash
-$ npm init @vue/latest
+$ npm create vue@latest
 ```
+
+vite.config.js
+```
+export default defineConfig({
+    server: {
+        host: "0.0.0.0", # ポートフォワーディングの設定
+        watch: {
+            usePolling: true # hot reloadの設定
+        }
+    }
+})    
+```
+
+Dockerfile
+```
+FROM --platform=$BUILDPLATFORM node:20-alpine AS development
+
+RUN mkdir /project
+WORKDIR /project
+
+COPY . .
+
+RUN npm install -g @vue/cli
+RUN npm install
+ENV HOST=0.0.0.0
+CMD ["npm", "run", "dev"]
+```
+
+```bash
+$ docker build -t vuejs .
+$ docker run -p 3000:5173 vuejs
+```
+
+これでホストマシンのlocalhost:3000でアクセスできる。
+
+### docker composeでの構築
+
+```bash
+$ docker compose up -d
+```
+
+フロントエンド: port 3000  
+バックエンド: port 80  
+
+以上で環境構築が完了。
+
+各コンテナの中に入りたい場合は、
+```bash
+$ docker compose exec web sh
+```
+
+
 
 
