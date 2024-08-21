@@ -2,3 +2,5 @@ fastapi[standard]
 pydantic
 sqlalchemy
 psycopg2
+pyjwt
+passlib[bcrypt]

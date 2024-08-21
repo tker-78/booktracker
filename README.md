@@ -14,6 +14,24 @@ $ docker build myimage ./app
 $ docker run -p 80:80 myimage
 ```
 
+Dockerのコンテナに接続するには、`Dev Containers`の拡張機能を使う。
+
+Dockerコンテナを起動した状態で、
+`Dev Containers: Attach to Running Container..`を選択する。
+
+ホストマシンとファイルを同期するために、
+`docker-compose.yml`にvolumesの指定をする。
+
+```yaml
+app:
+  ...
+  volumes:
+    ./app:/usr/src/app # hostとcontainerのファイルの同期
+  ...
+```
+
+
+
 
 ### front(フロント側)
 
@@ -22,7 +40,7 @@ $ npm create vue@latest
 ```
 
 vite.config.js
-```
+```js
 export default defineConfig({
     server: {
         host: "0.0.0.0", # ポートフォワーディングの設定
@@ -70,6 +88,38 @@ $ docker compose up -d
 ```bash
 $ docker compose exec web sh
 ```
+
+
+
+## JWT認証
+
+[ここの記事](https://chocottopro.com/?p=493)を参照して実装した。
+
+
+ライブラリのインストール  
+
+requirements.txt
+```
+# 追記
+pyjwt
+pathlib[bcrypt]
+```
+
+main.py
+```python
+import jwt
+pyload = {'user_id': 123, 'username': 'john'}
+secret = 'your-secret-key'
+token = jwt.encode(payload, secret, algorithm='HS256')
+
+print(token)
+
+# => eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjMsInVzZXJuYW1lIjoiam9obiJ9.GLAqBbc7CE9_5XLR3UbEjV9l2p-mS2433zPnqy0uEWA
+
+```
+
+
+
 
 
 

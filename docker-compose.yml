@@ -1,11 +1,13 @@
 services:
   app:
     build: ./app
-    command: fastapi run ./main.py --port 80
+    command: fastapi run ./main.py --port 80 --reload
     ports:
       - "80:80"
     depends_on:
       - db
+    volumes:
+      - ./app:/usr/src/app
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
