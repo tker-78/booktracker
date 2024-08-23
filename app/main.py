@@ -54,12 +54,12 @@ def root():
 
 
 def verify_password(plain_password, hashed_password):
-    print("verify_password()")
+    print("called: verify_password()")
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password):
-    print("get_password_hash()")
+    print("called: get_password_hash()")
     return pwd_context.hash(password)
 
 def get_user(db, username: str):
@@ -118,13 +118,11 @@ async def get_current_active_user(
     return current_user
 
 @app.post("/token")
-async def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-) -> Token:
+async def login_for_access_token( form_data: Annotated[OAuth2PasswordRequestForm, Depends()],) -> Token:
     user = authenticate_user(fake_users_db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_401UNAUTHORIZED,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
