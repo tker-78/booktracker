@@ -93,31 +93,7 @@ $ docker compose exec web sh
 
 ## JWT認証
 
-[ここの記事](https://chocottopro.com/?p=493)を参照して実装した。
-
-
-ライブラリのインストール  
-
-requirements.txt
-```
-# 追記
-pyjwt
-pathlib[bcrypt]
-```
-
-main.py
-```python
-import jwt
-pyload = {'user_id': 123, 'username': 'john'}
-secret = 'your-secret-key'
-token = jwt.encode(payload, secret, algorithm='HS256')
-
-print(token)
-
-# => eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjMsInVzZXJuYW1lIjoiam9obiJ9.GLAqBbc7CE9_5XLR3UbEjV9l2p-mS2433zPnqy0uEWA
-
-```
-
+[公式ドキュメント](https://fastapi.tiangolo.com/ja/tutorial/security/oauth2-jwt/#_3)を参照。
 
 
 
