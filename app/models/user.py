@@ -17,6 +17,11 @@ class UserList(Base):
     @classmethod
     def create(cls, id, name, age, password, created_at):
         user = cls(id=id, name=name, age=age, password=password, created_at=created_at)
+
+
+    @classmethod
+    def create(cls, id, name, age):
+        user = cls(id=id, name=name, age=age)
         try:
             with session_scope() as session:
                 session.add(user)

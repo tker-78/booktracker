@@ -9,6 +9,8 @@ from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
+from models.user import UserList
+
 # openssl rand -hex 32(ランダムな文字列を生成)
 SECRET_KEY = "aaf0cbe6b84afb4ad7044277ebd51508f11187d7dbcfacfbcb5c606ba0f4ba53"
 ALGORITHM = "HS256"
@@ -48,28 +50,20 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app = FastAPI()
 
-@app.get("/")
-def root():
-    return {"message": "hello my fastAPI"}
-
 
 def verify_password(plain_password, hashed_password):
-    print("called: verify_password()")
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password):
-    print("called: get_password_hash()")
     return pwd_context.hash(password)
 
 def get_user(db, username: str):
-    print("called: get_user()")
     if username in db:
         user_dict = db[username]
         return UserInDB(**user_dict)
 
 def authenticate_user(fake_db, username: str, password: str):
-    print("called: authenticate_user()")
     user = get_user(fake_db, username)
     if not user:
         return False
@@ -78,7 +72,6 @@ def authenticate_user(fake_db, username: str, password: str):
     return user
 
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
-    print("called: create_access_token()")
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -89,7 +82,6 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     return encoded_jwt
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-    print("called: get_current_user()")
     credentials_exception = HTTPException(
         status_code = status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -112,10 +104,16 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 async def get_current_active_user(
         current_user: Annotated[User, Depends(get_current_user)],
 ):
-    print("called: get_current_active_user()")
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
+
+
+
+
+
+
 
 @app.post("/token")
 async def login_for_access_token( form_data: Annotated[OAuth2PasswordRequestForm, Depends()],) -> Token:
@@ -143,6 +141,20 @@ async def read_own_items(
     current_user: Annotated[User, Depends(get_current_active_user)],
 ):
     return [{"item_id": "Foo", "owner": current_user.username}]
+
+@app.get("/")
+def root():
+    return {"message": "hello my fastAPI"}
+
+@app.get("/user/{id}")
+def user(id: int):
+    user = UserList.get(id)
+    return {"id": user.id, "name": user.name, "age": user.age}
+
+@app.post("/user/")
+def create_user(id, name, age):
+    UserList.create(id, name, age)
+    return {"message": f'user {id} created.'}
 
 
 
