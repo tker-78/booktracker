@@ -95,8 +95,27 @@ $ docker compose exec web sh
 
 [公式ドキュメント](https://fastapi.tiangolo.com/ja/tutorial/security/oauth2-jwt/#_3)を参照。
 
+#### CryptContextオブジェクトを作成する
+```python
+from passlib.context import CryptContext
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+```
+
+#### OAuth2Passwordの関数オブジェクトを作成する
+```python
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+```
 
 
+#### tokenへのポストでtokenを生成する
 
 
+```python
+@app.post("/token")
+async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],) -> Token:
+  pass
+
+```
 
