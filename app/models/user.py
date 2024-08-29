@@ -4,24 +4,20 @@ from datetime import datetime
 from models.base import Base, session_scope
 
 
-class UserList(Base):
+class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    age = Column(Integer)
-    password = Column(String)
+    username = Column(String)
+    email = Column(String)
+    hashed_password = Column(String)
     created_at = Column(DateTime)
-    updated_at = Column(DateTime)
+    disabled = Column(Boolean)
 
-
-    @classmethod
-    def create(cls, id, name, age, password, created_at):
-        user = cls(id=id, name=name, age=age, password=password, created_at=created_at)
 
 
     @classmethod
-    def create(cls, id, name, age):
-        user = cls(id=id, name=name, age=age)
+    def create(cls, id, username, email, hashed_password, created_at, disabled):
+        user = cls(id=id, username=username, email=email, hashed_password=hashed_password, created_at=created_at, disabled=disabled)
         try:
             with session_scope() as session:
                 session.add(user)
@@ -35,3 +31,12 @@ class UserList(Base):
         if user is None:
             return None
         return user
+
+    @classmethod
+    def get_by_username(cls, username):
+        with session_scope() as session:
+            user = session.query(cls).filter(cls.username == username).first()
+        if user is None:
+            return None
+        return user
+        
