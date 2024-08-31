@@ -1,0 +1,63 @@
+@startuml
+entity users {
+  * id
+  email
+  password
+  username
+  profile_image
+  created_at
+  updated_at
+}
+
+entity books {
+  * id
+  title
+  author
+  published_at
+  category
+  cover_image
+  created_at
+  updated_at
+}
+
+entity reviews {
+  * id
+  # user_id
+  # book_id
+  content
+  rating
+  created_at
+  updated_at
+}
+
+entity friends {
+  * id
+  # user_id
+  # friend_id
+}
+
+entity read_statuses {
+  * id
+  # user_id
+  # book_id
+  status
+  started_at
+  finished_at
+}
+
+entity notes {
+  * id
+  # user_id
+  # book_id
+  content
+  created_at
+  updated_at
+}
+
+users ||--|{ reviews : has many
+users ||--|{ friends : has many
+users ||--|{ read_statuses : has many
+books ||--|{ reviews : has many
+books ||--|{ read_statuses : has many
+
+@enduml

@@ -7,6 +7,21 @@
 
 ## 環境構築
 
+
+## PlantUMLの設定
+データベースのUMLを記述するために、PlantUMLを使用する。
+
+- javaをインストール
+
+```
+$ choco install plantuml
+```
+
+graphvizにpathを通す。
+
+
+
+
 ### app(バックエンド側)
 
 ```bash
@@ -29,6 +44,11 @@ app:
     ./app:/usr/src/app # hostとcontainerのファイルの同期
   ...
 ```
+
+
+#### データベース設計 
+
+![database_scheme](./out/diagram/diagram.png)
 
 
 
