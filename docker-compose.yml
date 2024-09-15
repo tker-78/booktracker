@@ -32,8 +32,9 @@ services:
       - 3000:5173
     volumes:
       - ./front:/project
-      - /project/node_modules
+      - node_modules_vol:/project/node_modules
 volumes:
   postgres_db_vol:
+  node_modules_vol:
 
       

@@ -12,6 +12,7 @@ entity users {
 entity books {
   * id
   title
+  isbn
   author
   published_at
   category

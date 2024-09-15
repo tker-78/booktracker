@@ -33,6 +33,7 @@ def session_scope():
 def init_db():
     # __init__.pyから呼び出す
     import models.user
+    import models.book
     Base.metadata.create_all(bind=engine)
     print("database initialized..")
     

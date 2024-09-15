@@ -1,8 +1,14 @@
 # BookTracker
 
-[概要](https://butter-epoch-8f2.notion.site/booktracker-eb0c7435171c4e82b9460f067fe6cbda?pvs=4)
-[設計書](https://butter-epoch-8f2.notion.site/BookTracker-fecb4769c1254e01a178bbc0f603cea5?pvs=4)
+- [概要](https://butter-epoch-8f2.notion.site/booktracker-eb0c7435171c4e82b9460f067fe6cbda?pvs=4)
 
+- [設計書](https://butter-epoch-8f2.notion.site/BookTracker-fecb4769c1254e01a178bbc0f603cea5?pvs=4)
+
+
+## 参考資料
+
+- [Developing a Single Page App with FastAPI and Vue.js](https://testdriven.io/blog/developing-a-single-page-app-with-fastapi-and-vuejs/)  
+  構成が似ているので、詰まった時には参照する
 
 
 ## 環境構築
@@ -18,8 +24,6 @@ $ choco install plantuml
 ```
 
 graphvizにpathを通す。
-
-
 
 
 ### app(バックエンド側)

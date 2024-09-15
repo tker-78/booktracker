@@ -6,7 +6,7 @@ from models.base import Base, session_scope
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String)
     email = Column(String)
     hashed_password = Column(String)
@@ -16,8 +16,8 @@ class User(Base):
 
 
     @classmethod
-    def create(cls, id, username, email, hashed_password, created_at, disabled):
-        user = cls(id=id, username=username, email=email, hashed_password=hashed_password, created_at=created_at, disabled=disabled)
+    def create(cls, username, email, hashed_password, created_at, disabled):
+        user = cls(username=username, email=email, hashed_password=hashed_password, created_at=created_at, disabled=disabled)
         try:
             with session_scope() as session:
                 session.add(user)

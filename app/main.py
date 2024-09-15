@@ -1,16 +1,21 @@
 from datetime import datetime, timedelta, timezone
-from typing import Annotated, Union
+from typing import Annotated, Union, List
 
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
+from pydantic import BaseModel
+
 from models.user import User
+from models.book import Book
 
 import helpers.auth as auth
 from helpers.auth import Token
 
-app = FastAPI()
+from models.user import User
 
+
+app = FastAPI()
 
 @app.post("/token")
 async def login_for_access_token( form_data: Annotated[OAuth2PasswordRequestForm, Depends()],) -> Token:
@@ -27,8 +32,6 @@ async def login_for_access_token( form_data: Annotated[OAuth2PasswordRequestForm
     )
     return Token(access_token=access_token, token_type="bearer")
 
-
-
 @app.get("/users/me", response_model=auth.UserResponse)
 async def read_users_me(
     current_user: Annotated[auth.UserResponse, Depends(auth.get_current_active_user)],
@@ -41,10 +44,6 @@ async def read_own_items(
 ):
     return [{"item_id": "Foo", "owner": current_user.username}]
 
-@app.get("/")
-def root():
-    return {"message": "hello my fastAPI"}
-
 @app.get("/user/{id}")
 def user(id: int):
     user = User.get(id)
@@ -53,10 +52,23 @@ def user(id: int):
     return {"id": user.id, "username": user.username, "email": user.email, "hashed_password": user.hashed_password}
 
 @app.post("/user/")
-def create_user(id, username, email, password):
+def create_user(username, email, password):
     hashed_password = auth.get_password_hash(password)
-    User.create(id, username, email, hashed_password, datetime.now(), False)
-    return {"message": f'user {id} created.'}
+    User.create(username, email, hashed_password, datetime.now(), False)
+    return {"message": f'user {username} created.'}
 
+class GoogleBooksApiResponse(BaseModel):
+    title: str
+    authors: List[str]
+    description: str
+    isbn: int
+    image: str
+
+
+
+@app.get("/book/{title}")
+def search_book(title):
+    books = Book.get_books_from_google(title)
+    return books
 
 
